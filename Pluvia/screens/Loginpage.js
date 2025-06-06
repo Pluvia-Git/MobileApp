@@ -37,7 +37,7 @@ export default function Loginpage() {
       })
       .then(data => {
         console.log('Login realizado:', data);
-        navigation.navigate('Home');
+        navigation.navigate('Mainpage');
       })
       .catch(error => {
         Alert.alert('Erro', 'Email ou senha inválidos');
