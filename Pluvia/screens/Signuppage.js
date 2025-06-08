@@ -87,6 +87,7 @@ export default function Signup() {
       }
     } catch (error) {
       Alert.alert('Não foi culpa sua!', 'Erro de conexão com o servidor.');
+      console.log(error)
     } finally {
       setLoadingCadastro(false);
     }

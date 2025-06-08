@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Dimensions, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL_LOGIN } from '@env';
 
 const { width, height } = Dimensions.get('window');
@@ -35,17 +36,25 @@ export default function Loginpage() {
           throw new Error('Login inválido');
         }
       })
-      .then(data => {
+      .then(async data => {
         console.log('Login realizado:', data);
+
+        try {
+          await AsyncStorage.setItem('emailUsuario', email);
+        } catch (error) {
+          console.error('Erro ao salvar email:', error);
+        }
+
         navigation.navigate('Mainpage');
       })
       .catch(error => {
         Alert.alert('Erro', 'Email ou senha inválidos');
+        console.log(error)
       });
   };
 
   return (
-    <Animatable.View 
+    <Animatable.View
       animation="fadeInUp"
       duration={1000}
       style={styles.container}
@@ -62,17 +71,18 @@ export default function Loginpage() {
 
       <View style={styles.form}>
         <Text style={styles.label}>Email</Text>
-        <TextInput 
+        <TextInput
           placeholder="Digite seu email"
           placeholderTextColor="#aaa"
           style={styles.input}
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
+          autoCapitalize="none"
         />
 
         <Text style={styles.label}>Senha</Text>
-        <TextInput 
+        <TextInput
           placeholder="Digite sua senha"
           placeholderTextColor="#aaa"
           style={styles.input}
@@ -156,7 +166,7 @@ const styles = StyleSheet.create({
     shadowRadius: 7,
     alignItems: 'center',
     marginBottom: 15,
-    marginTop: 20
+    marginTop: 20,
   },
   buttonText: {
     color: '#fff',
@@ -166,7 +176,7 @@ const styles = StyleSheet.create({
   },
   signupContainer: {
     alignItems: 'center',
-    marginBottom: 50
+    marginBottom: 50,
   },
   signupText: {
     color: '#004080',
